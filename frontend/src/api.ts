@@ -7,7 +7,8 @@ import type {
   User,
 } from "./types";
 
-const BASE = "http://localhost:8000/api";
+// Same-origin in production (FastAPI serves the app); Vite proxies /api in dev.
+const BASE = "/api";
 
 export class ApiError extends Error {
   status: number;

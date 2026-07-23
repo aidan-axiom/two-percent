@@ -86,6 +86,31 @@ frontend/src/
   components/        auth form, kitchen, suggestions, saved recipes
 ```
 
+## Deploying (Fly.io + Neon)
+
+One Fly app runs everything: the Dockerfile builds the frontend, and FastAPI
+serves both the static app and the API from a single origin. Postgres lives on
+Neon's free tier, so Fly stays stateless and can scale to zero when idle.
+
+1. **Database** — create a free project at [neon.tech](https://neon.tech) and
+   copy its connection string (`postgresql://...`; the app normalizes the
+   driver automatically).
+2. **App** — from the repo root:
+
+   ```bash
+   fly launch --no-deploy   # accept the existing fly.toml; app name must be unique
+   fly secrets set \
+     DATABASE_URL='<neon connection string>' \
+     GEMINI_API_KEY='<your free key>' \
+     SECRET_KEY="$(python3 -c 'import secrets; print(secrets.token_hex(32))')"
+   fly deploy
+   ```
+
+3. Open `https://<app-name>.fly.dev` — tables are created on first boot.
+
+Machines auto-stop when idle and wake in about a second on the next request,
+so a low-traffic deployment costs pennies (or nothing, within Fly's allowances).
+
 ## Notes
 
 - Suggestions use fast models on both providers (`gemini-2.5-flash`,
@@ -93,3 +118,5 @@ frontend/src/
   is generous (4 minutes) as a safety margin.
 - Tables are created automatically on backend startup (`create_all`). If the
   schema evolves after you have real data, switch to Alembic migrations.
+- In dev, Vite proxies `/api` to the backend on :8000, so the browser only
+  ever talks to one origin — same as production.

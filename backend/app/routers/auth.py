@@ -41,6 +41,7 @@ def _set_session_cookie(response: Response, user_id: int) -> None:
         value=create_access_token(user_id),
         httponly=True,
         samesite="lax",
+        secure=settings.cookie_secure,
         max_age=settings.access_token_ttl_hours * 3600,
     )
 

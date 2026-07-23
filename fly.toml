@@ -1,0 +1,21 @@
+# fly.toml — 2% (FastAPI + built React frontend in one app)
+app = "two-percent"
+primary_region = "sea"
+
+[build]
+  # uses ./Dockerfile
+
+[env]
+  COOKIE_SECURE = "true"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  # scale to zero when idle; machines wake in ~1s on the next request
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "512mb"
