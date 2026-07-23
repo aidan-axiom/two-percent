@@ -88,7 +88,8 @@ frontend/src/
 
 ## Notes
 
-- The suggestions call can take a minute or more (the model thinks before
-  answering); the UI shows a loading state and the client timeout is 4 minutes.
+- Suggestions use fast models on both providers (`gemini-2.5-flash`,
+  `claude-haiku-4-5`) and usually return in a few seconds; the client timeout
+  is generous (4 minutes) as a safety margin.
 - Tables are created automatically on backend startup (`create_all`). If the
   schema evolves after you have real data, switch to Alembic migrations.

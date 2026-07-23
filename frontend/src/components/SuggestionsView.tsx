@@ -60,7 +60,7 @@ export default function SuggestionsView({
         </button>
         {loading && (
           <span className="hint">
-            Taking stock of the fridge — this can take a minute or two.
+            Taking stock of the fridge — just a few seconds.
           </span>
         )}
       </div>

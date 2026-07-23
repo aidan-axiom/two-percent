@@ -31,12 +31,12 @@ def _build_prompt(ingredients: list[str]) -> str:
 def _suggest_claude(api_key: str, ingredients: list[str]) -> RecipeSuggestions:
     client = anthropic.Anthropic(api_key=api_key)
     try:
+        # Haiku: the fast, cheap tier — recipe suggestions don't need Opus.
+        # (No thinking/effort params; Haiku 4.5 doesn't support them.)
         response = client.messages.parse(
-            model="claude-opus-4-8",
-            max_tokens=16000,
+            model="claude-haiku-4-5",
+            max_tokens=8000,
             system=SYSTEM,
-            thinking={"type": "adaptive"},
-            output_config={"effort": "medium"},
             messages=[{"role": "user", "content": _build_prompt(ingredients)}],
             output_format=RecipeSuggestions,
         )
